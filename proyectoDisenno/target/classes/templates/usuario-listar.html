@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista de Usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .cards-container {
+            display: flex; /* Usa Flexbox para el contenedor de tarjetas */
+            flex-wrap: wrap; /* Permite que las tarjetas se ajusten y envuelvan */
+            justify-content: center; /* Centra las tarjetas horizontalmente */
+            gap: 15px; /* Espacio entre las tarjetas */
+        }
+        .card-custom {
+            width: 300px; /* Controla el ancho de cada tarjeta */
+            margin-bottom: 20px; /* Espacio debajo de cada tarjeta */
+            border: 0; /* Elimina cualquier borde predeterminado */
+            padding: 0; /* Elimina cualquier padding predeterminado */
+        }
+        .card-img-top {
+            width: 100%; /* Ajusta la imagen para que ocupe el ancho completo de la tarjeta */
+            height: 400px; /* Altura fija de la imagen */
+            object-fit: cover; /* Asegura que la imagen cubra completamente el área asignada sin distorsionarse */
+        }
+        .text-center-card {
+            text-align: center; /* Centra el texto dentro de la tarjeta */
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container py-4">
+        <h1 class="text-center pt-3 mb-5">Usuarios</h1> <!-- Título de la página -->
+        <div class="cards-container">
+            <div th:each="usuario : ${usuarios}" class="card h-100 card-custom">
+                <img class="card-img-top" th:src="${usuario.urlFoto}" alt="Imagen de Usuario" />
+                <div class="card-body text-center-card">
+                    <h5 class="card-title" th:text="${usuario.identificacion}">Identificación</h5>
+                    <span class="d-block" th:text="${usuario.nombreCompleto}">Nombre Completo</span>
+                    <span class="d-block" th:text="${usuario.correo}">Correo</span>
+                    <span class="d-block" th:text="${usuario.numeroTelefono}">Número de Teléfono</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
