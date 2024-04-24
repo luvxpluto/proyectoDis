@@ -1,13 +1,13 @@
 package com.web.proyectoDisenno.thirdparty;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.io.image.ImageDataFactory;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 
 public class PDFCreator {
@@ -26,41 +26,53 @@ public class PDFCreator {
 
   public byte[] createPdf(String infoUsuario, String imagenUsuario, String infoSentimientos,
                           String imagenNube, String infoIdea, String infoGPT) {
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    try {
-      PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-      PdfDocument pdf = new PdfDocument(writer);
-      Document document = new Document(pdf);
+    try (PDDocument document = new PDDocument()) {
+      PDPage page = new PDPage(PDRectangle.A4);
+      document.addPage(page);
+      try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+        PDImageXObject userImage = PDImageXObject.createFromFile(new URL(imagenUsuario).getPath(), document);
+        PDImageXObject nubeImage = PDImageXObject.createFromFile(new URL(imagenNube).getPath(), document);
 
-      // Información del usuario
-      document.add(new Paragraph("Información del Usuario: \n" + infoUsuario));
-      Image userImage = new Image(ImageDataFactory.create(new URL(imagenUsuario)));
-      userImage.scaleToFit(200, 200); // Ajustar el tamaño de la imagen del usuario
-      document.add(userImage);
+        // Información del usuario y su imagen
+        contentStream.beginText();
+        contentStream.setLeading(14.5f);
+        contentStream.newLineAtOffset(25, 750);
+        contentStream.showText("Información del Usuario: ");
+        contentStream.newLine();
+        contentStream.showText(infoUsuario);
+        contentStream.endText();
+        contentStream.drawImage(userImage, 25, 620, 200, 200);
 
-      // Sentimientos
-      document.add(new Paragraph("Análisis de Sentimientos: \n" + infoSentimientos));
+        // Análisis de sentimientos
+        contentStream.beginText();
+        contentStream.newLineAtOffset(25, 400);
+        contentStream.showText("Análisis de Sentimientos: ");
+        contentStream.newLine();
+        contentStream.showText(infoSentimientos);
+        contentStream.endText();
 
-      // Nube de palabras
-      document.add(new Paragraph("Nube de Palabras: "));
-      Image nubeImage = new Image(ImageDataFactory.create(new URL(imagenNube)));
-      nubeImage.scaleToFit(300, 300); // Ajustar el tamaño de la imagen de la nube de palabras
-      document.add(nubeImage);
+        // Nube de palabras
+        contentStream.drawImage(nubeImage, 25, 100, 300, 300);
 
-      // Idea principal
-      document.add(new Paragraph("Idea Principal: \n" + infoIdea));
+        // Idea principal y respuesta GPT
+        contentStream.beginText();
+        contentStream.newLineAtOffset(25, 50);
+        contentStream.showText("Idea Principal: ");
+        contentStream.newLine();
+        contentStream.showText(infoIdea);
+        contentStream.newLine();
+        contentStream.showText("Respuesta GPT acerca de la idea principal: ");
+        contentStream.newLine();
+        contentStream.showText(infoGPT);
+        contentStream.endText();
+      }
 
-      // GPT Response
-      document.add(new Paragraph("Respuesta GPT acerca de la idea principal: \n" + infoGPT));
-
-      // Cierra el documento
-      document.close();
-
-      // Retorna el contenido del PDF como un arreglo de bytes
-      return byteArrayOutputStream.toByteArray();
-    } catch (Exception e) {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      document.save(out);
+      return out.toByteArray();
+    } catch (IOException e) {
       e.printStackTrace();
     }
-    return null; // En caso de error retorna null
+    return null;
   }
 }
