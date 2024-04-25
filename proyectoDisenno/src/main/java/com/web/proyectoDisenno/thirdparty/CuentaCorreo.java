@@ -9,8 +9,8 @@ import java.util.Properties;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class CuentaCorreo {
-  private final String usuario = System.getenv("USER_EMAIL");
-  private final String clave = System.getenv("PW_EMAIL");
+  private final String usuario = System.getenv("USER_MAIL");
+  private final String clave = System.getenv("PW_MAIL");
   private final Properties propiedades;
 
   // Instance of the singleton class
@@ -37,6 +37,8 @@ public class CuentaCorreo {
 
   public void enviarCorreo(String destinatario, String tituloCorreo, String cuerpo, byte[] pdfBytes) {
     Session sesion = abrirSesion();
+    System.out.println("Print CUENTA CORREO destinatario: "+destinatario);
+    System.out.println("Print CUENTA CORREO usuario: "+usuario);
     try {
       Message message = new MimeMessage(sesion);
       message.setFrom(new InternetAddress(usuario));

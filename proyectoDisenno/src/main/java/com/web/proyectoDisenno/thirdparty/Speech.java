@@ -20,7 +20,7 @@ public class Speech {
   // Constructor privado para evitar instanciación externa
   private Speech() throws IOException {
     // Decodificar las credenciales desde la variable de entorno
-    String base64Credentials = System.getenv("GOOGLE_CREDENTIALS_BASE64");
+    String base64Credentials = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
     byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
     try (InputStream credentialsStream = new ByteArrayInputStream(decodedBytes)) {
       GoogleCredentials credentials = GoogleCredentials.fromStream(credentialsStream);

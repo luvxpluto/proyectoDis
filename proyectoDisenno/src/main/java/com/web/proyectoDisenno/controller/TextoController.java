@@ -111,6 +111,7 @@ public class TextoController {
     model.addAttribute("texto", texto);
     if(correo.verificarDestinatario(usuario.getCorreo())){
       texto.generarPdf(usuario.getIdentificacion(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getNumeroTelefono(),usuario.getUrlFoto());
+      System.out.println("Print controlador: "  + usuario.getCorreo());
       model.addAttribute("message","Correo enviado con éxito");
       return "texto-correo";
     }

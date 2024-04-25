@@ -1,13 +1,14 @@
 package com.web.proyectoDisenno.thirdparty;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class PDFCreator {
@@ -26,53 +27,40 @@ public class PDFCreator {
 
   public byte[] createPdf(String infoUsuario, String imagenUsuario, String infoSentimientos,
                           String imagenNube, String infoIdea, String infoGPT) {
-    try (PDDocument document = new PDDocument()) {
-      PDPage page = new PDPage(PDRectangle.A4);
-      document.addPage(page);
-      try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-        PDImageXObject userImage = PDImageXObject.createFromFile(new URL(imagenUsuario).getPath(), document);
-        PDImageXObject nubeImage = PDImageXObject.createFromFile(new URL(imagenNube).getPath(), document);
+    Document document = new Document();
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    try {
+      PdfWriter.getInstance(document, byteArrayOutputStream);
+      document.open();
 
-        // Información del usuario y su imagen
-        contentStream.beginText();
-        contentStream.setLeading(14.5f);
-        contentStream.newLineAtOffset(25, 750);
-        contentStream.showText("Información del Usuario: ");
-        contentStream.newLine();
-        contentStream.showText(infoUsuario);
-        contentStream.endText();
-        contentStream.drawImage(userImage, 25, 620, 200, 200);
+      // Información del usuario
+      document.add(new Paragraph("Información del Usuario: \n" + infoUsuario));
+      Image userImage = Image.getInstance(new URL(imagenUsuario));
+      userImage.scaleToFit(200, 200); // Ajustar el tamaño de la imagen del usuario
+      document.add(userImage);
 
-        // Análisis de sentimientos
-        contentStream.beginText();
-        contentStream.newLineAtOffset(25, 400);
-        contentStream.showText("Análisis de Sentimientos: ");
-        contentStream.newLine();
-        contentStream.showText(infoSentimientos);
-        contentStream.endText();
+      // Sentimientos
+      document.add(new Paragraph("Análisis de Sentimientos: \n" + infoSentimientos));
 
-        // Nube de palabras
-        contentStream.drawImage(nubeImage, 25, 100, 300, 300);
+      // Nube de palabras
+      document.add(new Paragraph("Nube de Palabras: "));
+      Image nubeImage = Image.getInstance(new URL(imagenNube));
+      nubeImage.scaleToFit(300, 300); // Ajustar el tamaño de la imagen de la nube de palabras
+      document.add(nubeImage);
 
-        // Idea principal y respuesta GPT
-        contentStream.beginText();
-        contentStream.newLineAtOffset(25, 50);
-        contentStream.showText("Idea Principal: ");
-        contentStream.newLine();
-        contentStream.showText(infoIdea);
-        contentStream.newLine();
-        contentStream.showText("Respuesta GPT acerca de la idea principal: ");
-        contentStream.newLine();
-        contentStream.showText(infoGPT);
-        contentStream.endText();
-      }
+      // Idea principal
+      document.add(new Paragraph("Idea Principal: \n" + infoIdea));
 
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      document.save(out);
-      return out.toByteArray();
+      // GPT Response
+      document.add(new Paragraph("Respuesta GPT acerca de la idea principal: \n" + infoGPT));
+
+      document.close(); // Cierra el documento
+      return byteArrayOutputStream.toByteArray(); // Retorna el contenido del PDF como un arreglo de bytes
+    } catch (DocumentException | MalformedURLException e) {
+      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return null;
+    return null; // En caso de error retorna null
   }
 }
