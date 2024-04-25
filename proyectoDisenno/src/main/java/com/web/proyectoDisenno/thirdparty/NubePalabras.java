@@ -44,7 +44,7 @@ public class NubePalabras {
             Color.decode("#3E8AFA"),
             Color.decode("#DB6FDE"), 15, 15));
     wordCloud.setFontScalar(new SqrtFontScalar(10, 40));
-    wordCloud.setKumoFont(new KumoFont("Helvetica", FontWeight.BOLD));
+    wordCloud.setKumoFont(new KumoFont("Arial", FontWeight.BOLD));
   }
 
   // Method to get the singleton instance
