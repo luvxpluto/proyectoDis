@@ -107,7 +107,7 @@ public class Texto implements ITexto {
             "Correo: " + correo + "\n" +
             "Número: " + numero + "\n";
 
-    String infoSentimientos = "Prueba";
+    String infoSentimientos = analizarSentimientos();
     String imagenNube = generarNubePalabras();
     String infoIdea = generarIdeaPrincipal();
     String infoGPT = consultarIdea();
