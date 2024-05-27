@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista de Temáticas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .card-custom {
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        .card-img-top {
+            width: 100%;
+            height: auto;
+        }
+        .text-center-card {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container py-4">
+        <h1 class="text-center pt-3 mb-5">Temáticas</h1>
+        <div class="cards-container">
+            <div th:each="tematica : ${tematicas}" class="card h-100 card-custom">
+                <img class="card-img-top" th:src="${tematica.urlImagen}" alt="Imagen de la temática" />
+                <div class="card-body text-center-card">
+                    <h5 class="card-title" th:text="${tematica.nombre}">Nombre de la Temática</h5>
+                    <span class="d-block" th:text="${tematica.descripcion}">Descripción de la Temática</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
