@@ -10,11 +10,9 @@ import java.util.Map;
 
 public class CloudinaryManager {
 
-  private static CloudinaryManager instance; // Instancia Singleton
   private final Cloudinary cloudinary;
 
-  // Constructor privado para prevenir instanciación directa
-  private CloudinaryManager() {
+  public CloudinaryManager() {
     String cloudName = System.getenv("NAME_CLOUD");
     String apiKey = System.getenv("KEY_CLOUD");
     String apiSecret = System.getenv("SECRET_CLOUD");
@@ -27,13 +25,6 @@ public class CloudinaryManager {
     cloudinary = new Cloudinary(config);
   }
 
-  // Método público estático para obtener la instancia
-  public static synchronized CloudinaryManager getInstance() {
-    if (instance == null) {
-      instance = new CloudinaryManager();
-    }
-    return instance;
-  }
 
   public String uploadImage(File imageFile) throws IOException {
     Map<?, ?> result = cloudinary.uploader().upload(imageFile, ObjectUtils.emptyMap());

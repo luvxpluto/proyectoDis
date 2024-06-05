@@ -9,21 +9,11 @@ import java.net.URL;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class ChatGPT {
-  private static ChatGPT instance; // Instancia única de la clase
   private final String apiKey = System.getenv("KEY_GPT");
   private final String model = "gpt-3.5-turbo";
   private final String url = "https://api.openai.com/v1/chat/completions";
 
-  // Constructor privado para prevenir la instanciación externa
-  private ChatGPT() {}
-
-  // Método público estático para obtener la instancia
-  public static synchronized ChatGPT getInstance() {
-    if (instance == null) {
-      instance = new ChatGPT();
-    }
-    return instance;
-  }
+  public ChatGPT() {}
 
   public String obtenerRespuesta(String prompt) {
     try {

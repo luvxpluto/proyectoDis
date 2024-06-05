@@ -1,10 +1,11 @@
 package com.web.proyectoDisenno.model;
 
-import com.web.proyectoDisenno.thirdparty.ChatGPT;
-import com.web.proyectoDisenno.thirdparty.CuentaCorreo;
-import com.web.proyectoDisenno.thirdparty.NubePalabras;
-import com.web.proyectoDisenno.thirdparty.PDFCreator;
-import com.web.proyectoDisenno.thirdparty.Speech;
+import com.web.proyectoDisenno.creationallogic.ChatGPTSingleton;
+import com.web.proyectoDisenno.creationallogic.NubePalabrasSingleton;
+import com.web.proyectoDisenno.creationallogic.PDFCreatorSingleton;
+import com.web.proyectoDisenno.creationallogic.SpeechSingleton;
+import com.web.proyectoDisenno.creationallogic.CuentaCorreoSingleton;
+import com.web.proyectoDisenno.thirdparty.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -64,7 +65,7 @@ public class Texto implements ITexto {
   }
 
   public String analizarSentimientos() {
-    ChatGPT gpt = ChatGPT.getInstance();
+    ChatGPT gpt = ChatGPTSingleton.getInstance();
     JSONObject json = new JSONObject();
     json.put("prompt", "Extrae un conjunto de sentimientos relacionados con el texto");
     json.put("text", contenido.replace("\n", " "));
@@ -73,7 +74,7 @@ public class Texto implements ITexto {
   }
 
   public String generarNubePalabras(){
-    NubePalabras nube = NubePalabras.getInstance();
+    NubePalabras nube = NubePalabrasSingleton.getInstance();
     try {
       return nube.generar(contenido);
     } catch (IOException e) {
@@ -82,7 +83,7 @@ public class Texto implements ITexto {
   }
 
   public String generarIdeaPrincipal() {
-    ChatGPT gpt = ChatGPT.getInstance();
+    ChatGPT gpt = ChatGPTSingleton.getInstance();
     JSONObject json = new JSONObject();
     json.put("prompt", "Extrae idea principal del texto");
     json.put("text", contenido.replace("\n", " "));
@@ -93,7 +94,7 @@ public class Texto implements ITexto {
 
 
   public String consultarIdea() {
-    ChatGPT gpt = ChatGPT.getInstance();
+    ChatGPT gpt = ChatGPTSingleton.getInstance();
     JSONObject json = new JSONObject();
     json.put("prompt", "Dame información sobre la idea principal del texto (Expande la idea)");
     json.put("text", generarIdeaPrincipal().replace("\n", " "));
@@ -112,16 +113,16 @@ public class Texto implements ITexto {
     String infoIdea = generarIdeaPrincipal();
     String infoGPT = consultarIdea();
 
-    PDFCreator pdf = PDFCreator.getInstance();
+    PDFCreator pdf = PDFCreatorSingleton.getInstance();
     byte[] pdfBytes = pdf.createPdf(infoUsuario, imagenUsuario, infoSentimientos, imagenNube, infoIdea, infoGPT);
 
-    CuentaCorreo cuentaCorreo = CuentaCorreo.getInstance();
+    CuentaCorreo cuentaCorreo = CuentaCorreoSingleton.getInstance();
     System.out.println("Print texto: " + correo);
     cuentaCorreo.enviarCorreo(correo, "Informe de Análisis de Texto", "Se adjunta el informe de análisis de texto", pdfBytes);
   }
 
   private String consultarIdioma() {
-    ChatGPT gpt = ChatGPT.getInstance();
+    ChatGPT gpt = ChatGPTSingleton.getInstance();
     JSONObject json = new JSONObject();
     json.put("prompt", "Dame el idioma del texto (Responde solamente con el idioma)");
     json.put("text", contenido.replace("\n", " "));
@@ -138,7 +139,7 @@ public class Texto implements ITexto {
 
   public String generarAudio(){
     try{
-      Speech speech = Speech.getInstance();
+      Speech speech = SpeechSingleton.getInstance();
       return speech.synthesizeSpeech(contenido,consultarIdioma());
     } catch (IOException e) {
       throw new RuntimeException(e);

@@ -4,6 +4,7 @@ import com.web.proyectoDisenno.model.Tematica;
 import com.web.proyectoDisenno.model.Usuario;
 import com.web.proyectoDisenno.service.TematicaService;
 import com.web.proyectoDisenno.thirdparty.CloudinaryManager;
+import com.web.proyectoDisenno.creationallogic.CloudinaryManagerSingleton;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import java.util.List;
 @Controller
 public class TematicaController {
   private final TematicaService tematicaService;
-  private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance();
+  private final CloudinaryManager cloudinaryManager = CloudinaryManagerSingleton.getInstance();
 
   @Autowired
   public TematicaController(TematicaService tematicaService) {

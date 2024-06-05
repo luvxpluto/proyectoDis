@@ -9,6 +9,7 @@ import com.kennycason.kumo.font.KumoFont;
 import com.kennycason.kumo.font.scale.SqrtFontScalar;
 import com.kennycason.kumo.nlp.FrequencyAnalyzer;
 import com.kennycason.kumo.palette.LinearGradientColorPalette;
+import com.web.proyectoDisenno.creationallogic.CloudinaryManagerSingleton;
 
 import java.awt.Dimension;
 import java.awt.Color;
@@ -21,13 +22,9 @@ import java.util.List;
 
 public class NubePalabras {
   private WordCloud wordCloud;
-  private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance(); // Asumiendo que CloudinaryManager está en el mismo paquete
+  private final CloudinaryManager cloudinaryManager = CloudinaryManagerSingleton.getInstance(); // Asumiendo que CloudinaryManager está en el mismo paquete
 
-  // Instance of the singleton class
-  private static NubePalabras instance = null;
-
-  // Private constructor to prevent instantiation
-  private NubePalabras() {
+  public NubePalabras() {
     initWordCloud(); // Initialize the WordCloud object
   }
 
@@ -45,14 +42,6 @@ public class NubePalabras {
             Color.decode("#DB6FDE"), 15, 15));
     wordCloud.setFontScalar(new SqrtFontScalar(10, 40));
     wordCloud.setKumoFont(new KumoFont("Arial", FontWeight.BOLD));
-  }
-
-  // Method to get the singleton instance
-  public static NubePalabras getInstance() {
-    if (instance == null) {
-      instance = new NubePalabras();
-    }
-    return instance;
   }
 
   public String generar(String texto) throws IOException {

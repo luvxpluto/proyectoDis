@@ -1,5 +1,6 @@
 package com.web.proyectoDisenno.controller;
 
+import com.web.proyectoDisenno.creationallogic.CuentaCorreoSingleton;
 import com.web.proyectoDisenno.model.Texto;
 import com.web.proyectoDisenno.model.Usuario;
 import com.web.proyectoDisenno.service.TematicaService;
@@ -107,7 +108,7 @@ public class TextoController {
   public String enviarCorreo(@PathVariable Long textoId, HttpSession session,Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     Texto texto = textoService.getTextoById(textoId);
-    CuentaCorreo correo = CuentaCorreo.getInstance();
+    CuentaCorreo correo = CuentaCorreoSingleton.getInstance();
     model.addAttribute("texto", texto);
     if(correo.verificarDestinatario(usuario.getCorreo())){
       texto.generarPdf(usuario.getIdentificacion(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getNumeroTelefono(),usuario.getUrlFoto());
