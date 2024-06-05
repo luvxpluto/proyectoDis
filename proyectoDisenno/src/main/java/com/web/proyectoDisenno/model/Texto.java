@@ -24,6 +24,7 @@ public class Texto implements ITexto {
   @Getter
   private Long id;
   @Column(columnDefinition = "TEXT")
+  @JoinColumn(name = "tematica_nombre", nullable = false)
   @Getter
   private String contenido;
   @Getter
@@ -32,7 +33,6 @@ public class Texto implements ITexto {
   private int cantidadPalabras;
 
   @ManyToOne
-  @JoinColumn(name = "tematica_nombre", nullable = false)
   private Tematica tematica;
 
   public Texto(String contenido, Tematica tematica) {
