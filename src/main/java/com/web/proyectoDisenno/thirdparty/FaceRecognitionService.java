@@ -16,7 +16,9 @@ import java.util.Base64;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FaceRecognitionService {
   private UsuarioService usuarioService; //Servicio del usuario para obtener la información del usuario
   private AmazonRekognition rekognitionClient;

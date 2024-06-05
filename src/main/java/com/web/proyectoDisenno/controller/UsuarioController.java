@@ -2,6 +2,7 @@ package com.web.proyectoDisenno.controller;
 
 import com.web.proyectoDisenno.model.Usuario;
 import com.web.proyectoDisenno.service.UsuarioService;
+import com.web.proyectoDisenno.thirdparty.FaceRecognitionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,37 +16,36 @@ import java.util.List;
 @Controller
 public class UsuarioController {
   private final UsuarioService usuarioService;
+  private final FaceRecognitionService faceRecognitionService;
 
   @Autowired
-  public UsuarioController(UsuarioService usuarioService) {
+  public UsuarioController(UsuarioService usuarioService){
     this.usuarioService = usuarioService;
+    this.faceRecognitionService = new FaceRecognitionService(usuarioService);
   }
 
   @GetMapping("/")
   public String mostrarLogin() {
-    return "login";
+    return "faceLogin";
   }
 
   @PostMapping("/")
-  public String procesarLogin(@RequestParam String identificacion, HttpSession session, Model model) {
-    Usuario usuario = usuarioService.getUsuarioByIdentificacion(identificacion);
-    //Cambiar esto por autenticación con reconocimiento facial
-    //Ver como pasar la imagen a base64
-    //Ver como llamar este controller desde el front en js
-    //Se ocupa una instancia de FaceRecognitionService para autenticar al usuario
+  public String procesarLogin(@RequestParam("image") String image, HttpSession session, Model model) {
+    Usuario usuario = faceRecognitionService.authenticateUserFaceId(image);
+
     if (usuario != null) {
       session.setAttribute("usuario", usuario);
       return "redirect:/inicio";
     } else {
       model.addAttribute("error", "Usuario no encontrado");
-      return "login";
+      return "faceLogin";
     }
   }
 
   @GetMapping("/logout")
   public String procesarLogout(HttpSession session) {
     session.invalidate();
-    return "login";
+    return "faceLogin";
   }
 
   @GetMapping("/usuarios")
