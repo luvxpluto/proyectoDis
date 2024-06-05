@@ -31,7 +31,7 @@
 <body>
 <main layout:fragment="body">
     <div class="container py-4">
-        <h1 class="text-center pt-3 mb-5">Usuarios</h1> <!-- Título de la página -->
+        <h1 class="text-center pt-3 mb-5">Usuarios</h1>
         <div class="cards-container">
             <div th:each="usuario : ${usuarios}" class="card h-100 card-custom">
                 <img class="card-img-top" th:src="${usuario.urlFoto}" alt="Imagen de Usuario" />

@@ -23,4 +23,12 @@ public class UsuarioService {
   public Usuario getUsuarioByIdentificacion(String identificacion) {
     return usuarioRepository.findByIdentificacion(identificacion);
   }
+
+  public List<String> getUsuariosUrlImage() {
+    return getAllUsuarios().stream().map(Usuario::getUrlFoto).toList();
+  }
+
+  public Usuario getUsuarioByUrlFoto(String urlFoto) {
+    return usuarioRepository.findByUrlFoto(urlFoto);
+  }
 }

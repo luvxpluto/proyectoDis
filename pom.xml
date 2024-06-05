@@ -45,7 +45,6 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-core</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -106,8 +105,6 @@
 			<artifactId>pdfbox</artifactId>
 			<version>3.0.2</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-texttospeech</artifactId>
@@ -131,7 +128,21 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.3</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-rekognition</artifactId>
+			<version>1.12.484</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.484</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-core</artifactId>
+			<version>1.12.484</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

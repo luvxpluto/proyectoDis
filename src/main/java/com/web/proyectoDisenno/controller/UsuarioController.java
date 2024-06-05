@@ -28,8 +28,11 @@ public class UsuarioController {
 
   @PostMapping("/")
   public String procesarLogin(@RequestParam String identificacion, HttpSession session, Model model) {
-    System.out.println("Controlador FUNCIONANDO");
     Usuario usuario = usuarioService.getUsuarioByIdentificacion(identificacion);
+    //Cambiar esto por autenticación con reconocimiento facial
+    //Ver como pasar la imagen a base64
+    //Ver como llamar este controller desde el front en js
+    //Se ocupa una instancia de FaceRecognitionService para autenticar al usuario
     if (usuario != null) {
       session.setAttribute("usuario", usuario);
       return "redirect:/inicio";
