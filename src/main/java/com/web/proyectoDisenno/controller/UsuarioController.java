@@ -1,6 +1,7 @@
 package com.web.proyectoDisenno.controller;
 
-import com.web.proyectoDisenno.model.Usuario;
+import com.web.proyectoDisenno.model.*;
+import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.UsuarioService;
 import com.web.proyectoDisenno.thirdparty.FaceRecognitionService;
 import jakarta.servlet.http.HttpSession;
@@ -17,11 +18,14 @@ import java.util.List;
 public class UsuarioController {
   private final UsuarioService usuarioService;
   private final FaceRecognitionService faceRecognitionService;
+  private final UsuarioAction usuarioAction = new UsuarioAction();
+  private final BitacoraService bitacoraService;
 
   @Autowired
-  public UsuarioController(UsuarioService usuarioService){
+  public UsuarioController(UsuarioService usuarioService, BitacoraService bitacoraService) {
     this.usuarioService = usuarioService;
     this.faceRecognitionService = new FaceRecognitionService(usuarioService);
+    this.bitacoraService = bitacoraService;
   }
 
   @GetMapping("/")
@@ -49,7 +53,18 @@ public class UsuarioController {
   }
 
   @GetMapping("/usuarios")
-  public String listarUsuarios(Model model) {
+  public String listarUsuarios(Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Listar usuarios");
     List<Usuario> usuarios = usuarioService.getAllUsuarios();
     model.addAttribute("usuarios", usuarios);
     return "usuario-listar";

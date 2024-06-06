@@ -1,7 +1,7 @@
 package com.web.proyectoDisenno.controller;
 
-import com.web.proyectoDisenno.model.Tematica;
-import com.web.proyectoDisenno.model.Usuario;
+import com.web.proyectoDisenno.model.*;
+import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.TematicaService;
 import com.web.proyectoDisenno.thirdparty.CloudinaryManager;
 import jakarta.servlet.http.HttpSession;
@@ -23,10 +23,13 @@ import java.util.List;
 public class TematicaController {
   private final TematicaService tematicaService;
   private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance();
+  private final UsuarioAction usuarioAction = new UsuarioAction();
+  private BitacoraService bitacoraService;
 
   @Autowired
-  public TematicaController(TematicaService tematicaService) {
+  public TematicaController(TematicaService tematicaService, BitacoraService bitacoraService) {
     this.tematicaService = tematicaService;
+    this.bitacoraService = bitacoraService;
   }
 
   @GetMapping("/tematica/registrar")
@@ -40,6 +43,16 @@ public class TematicaController {
   public String procesarRegistrarTematica(@RequestParam String nombre, @RequestParam String descripcion, HttpSession session, Model model,
                                           @RequestParam("imagen") MultipartFile imagenFile) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+
     Tematica tematicaExistente = tematicaService.getTematicaByNombreAndUsuarioIdentificacion(nombre, usuario.getIdentificacion());
     List<String> allowedMimeTypes = Arrays.asList("image/jpeg", "image/png");
     Path tempFile = null;
@@ -61,6 +74,7 @@ public class TematicaController {
         // Crear y guardar la temática
         Tematica tematica = new Tematica(nombre, descripcion, usuario, imageUrl);
         tematicaService.saveTematica(tematica);
+        usuarioAction.setAccion("Registrar tematica");
 
       } else {
         model.addAttribute("error", "Formato de imagen no permitido");
@@ -88,6 +102,16 @@ public class TematicaController {
   @GetMapping("/tematica/listar")
   public String listarTematicas(HttpSession session, Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Listar tematicas");
     model.addAttribute("tematicas", tematicaService.getTematicasByUsuarioIdentificacion(usuario.getIdentificacion()));
     return "tematica-listar";
   }

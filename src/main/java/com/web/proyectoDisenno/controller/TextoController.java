@@ -1,10 +1,9 @@
 package com.web.proyectoDisenno.controller;
 
-import com.web.proyectoDisenno.model.Texto;
-import com.web.proyectoDisenno.model.Usuario;
+import com.web.proyectoDisenno.model.*;
+import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.TematicaService;
 import com.web.proyectoDisenno.service.TextoService;
-import com.web.proyectoDisenno.thirdparty.ChatGPT;
 import com.web.proyectoDisenno.thirdparty.CuentaCorreo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TextoController {
   private final TextoService textoService;
   private final TematicaService tematicaService;
+  private final UsuarioAction usuarioAction = new UsuarioAction();
+  private final BitacoraService bitacoraService;
+
+
 
   @Autowired
-  public TextoController(TextoService textoService, TematicaService tematicaService) {
+  public TextoController(TextoService textoService, TematicaService tematicaService, BitacoraService bitacoraService) {
     this.textoService = textoService;
     this.tematicaService = tematicaService;
+    this.bitacoraService = bitacoraService;
   }
 
   @GetMapping("/texto/registrar")
@@ -39,6 +43,16 @@ public class TextoController {
   @PostMapping("/texto/registrar")
   public String procesarRegistrarTexto(@RequestParam String tematica,@RequestParam String contenido, HttpSession session){
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Registrar texto");
     textoService.saveTexto(new Texto(contenido, tematicaService.getTematicaByNombreAndUsuarioIdentificacion(tematica, usuario.getIdentificacion())));
     return "redirect:/texto/registrar";
   }
@@ -56,6 +70,16 @@ public class TextoController {
   @PostMapping("/texto/consultar")
   public String procesarConsultarTexto(@RequestParam String tematica, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar texto");
     if (usuario == null) {
       return "redirect:/logout";
     }
@@ -65,13 +89,35 @@ public class TextoController {
   }
 
   @GetMapping("/texto/detalles/{textoId}")
-  public String mostrarDetallesTexto(@PathVariable Long textoId, Model model) {
+  public String mostrarDetallesTexto(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar detalles de texto");
     model.addAttribute("texto", textoService.getTextoById(textoId));
     return "texto-detalles";
   }
 
   @GetMapping("/texto/sentimientos/{textoId}")
-  public String mostrarSentimientosTexto(@PathVariable Long textoId, Model model) {
+  public String mostrarSentimientosTexto(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar sentimientos de texto");
     Texto texto = textoService.getTextoById(textoId);
     model.addAttribute("texto", texto);
     model.addAttribute("sentimientos", texto.analizarSentimientos());
@@ -79,7 +125,18 @@ public class TextoController {
   }
 
   @GetMapping("/texto/idea/{textoId}")
-  public String mostrarIdeaTexto(@PathVariable Long textoId, Model model) {
+  public String mostrarIdeaTexto(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar idea de texto");
     Texto texto = textoService.getTextoById(textoId);
     model.addAttribute("texto", texto);
     model.addAttribute("idea", texto.generarIdeaPrincipal());
@@ -87,7 +144,18 @@ public class TextoController {
   }
 
   @GetMapping("/texto/gpt/{textoId}")
-  public String mostrarGPTTexto(@PathVariable Long textoId, Model model) {
+  public String mostrarGPTTexto(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar a GPT el texto");
     Texto texto = textoService.getTextoById(textoId);
     model.addAttribute("texto", texto);
     model.addAttribute("gpt", texto.consultarIdea());
@@ -95,7 +163,18 @@ public class TextoController {
   }
 
   @GetMapping("/texto/cloud/{textoId}")
-  public String mostrarNubeTexto(@PathVariable Long textoId, Model model) {
+  public String mostrarNubeTexto(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Consultar nube de palabras de texto");
     Texto texto = textoService.getTextoById(textoId);
     String nubeUrl = texto.generarNubePalabras();
     model.addAttribute("texto", texto);
@@ -106,6 +185,16 @@ public class TextoController {
   @GetMapping("/texto/pdf/{textoId}")
   public String enviarCorreo(@PathVariable Long textoId, HttpSession session,Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Generar PDF de texto");
     Texto texto = textoService.getTextoById(textoId);
     CuentaCorreo correo = CuentaCorreo.getInstance();
     model.addAttribute("texto", texto);
@@ -121,6 +210,17 @@ public class TextoController {
 
   @GetMapping("/texto/speech/{textoId}")
   public String mostrarSpeech(@PathVariable Long textoId, Model model, HttpSession session) {
+    Usuario usuario = (Usuario) session.getAttribute("usuario");
+    Bitacora bitacora1 = new BitacoraCSV(usuario);
+    Bitacora bitacora2 = new BitacoraXML(usuario);
+    Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
+    bitacora1.setService(bitacoraService);
+    bitacora2.setService(bitacoraService);
+    bitacora3.setService(bitacoraService);
+    usuarioAction.attach(bitacora1);
+    usuarioAction.attach(bitacora2);
+    usuarioAction.attach(bitacora3);
+    usuarioAction.setAccion("Generar audio de texto");
     Texto texto = textoService.getTextoById(textoId);
     String speechUrl = texto.generarAudio();
     model.addAttribute("texto", texto);
