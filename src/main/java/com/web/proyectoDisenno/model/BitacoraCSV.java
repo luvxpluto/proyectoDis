@@ -20,7 +20,7 @@ public class BitacoraCSV extends Bitacora{
   public void registrar(String accion) {
     fecha = LocalDateTime.now().toLocalDate();
     descripcion = accion + "," +
-            usuario.getNombreCompleto() +
+            usuario.getNombreCompleto() + "," +
             fecha + "," +
             getIP() + "," +
             System.getProperty("os.name") + "," +
