@@ -23,7 +23,6 @@ import java.util.List;
 public class TematicaController {
   private final TematicaService tematicaService;
   private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance();
-  private final UsuarioAction usuarioAction = new UsuarioAction();
   private BitacoraService bitacoraService;
 
   @Autowired
@@ -43,6 +42,7 @@ public class TematicaController {
   public String procesarRegistrarTematica(@RequestParam String nombre, @RequestParam String descripcion, HttpSession session, Model model,
                                           @RequestParam("imagen") MultipartFile imagenFile) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -102,6 +102,7 @@ public class TematicaController {
   @GetMapping("/tematica/listar")
   public String listarTematicas(HttpSession session, Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);

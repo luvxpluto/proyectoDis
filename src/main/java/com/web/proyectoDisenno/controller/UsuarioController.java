@@ -18,7 +18,6 @@ import java.util.List;
 public class UsuarioController {
   private final UsuarioService usuarioService;
   private final FaceRecognitionService faceRecognitionService;
-  private final UsuarioAction usuarioAction = new UsuarioAction();
   private final BitacoraService bitacoraService;
 
   @Autowired
@@ -55,6 +54,7 @@ public class UsuarioController {
   @GetMapping("/usuarios")
   public String listarUsuarios(Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);

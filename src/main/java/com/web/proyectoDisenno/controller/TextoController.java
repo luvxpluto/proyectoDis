@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TextoController {
   private final TextoService textoService;
   private final TematicaService tematicaService;
-  private final UsuarioAction usuarioAction = new UsuarioAction();
   private final BitacoraService bitacoraService;
 
 
@@ -43,6 +42,7 @@ public class TextoController {
   @PostMapping("/texto/registrar")
   public String procesarRegistrarTexto(@RequestParam String tematica,@RequestParam String contenido, HttpSession session){
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -70,6 +70,7 @@ public class TextoController {
   @PostMapping("/texto/consultar")
   public String procesarConsultarTexto(@RequestParam String tematica, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -79,7 +80,7 @@ public class TextoController {
     usuarioAction.attach(bitacora1);
     usuarioAction.attach(bitacora2);
     usuarioAction.attach(bitacora3);
-    usuarioAction.setAccion("Consultar texto");
+    usuarioAction.setAccion("Consultar textos");
     if (usuario == null) {
       return "redirect:/logout";
     }
@@ -91,6 +92,7 @@ public class TextoController {
   @GetMapping("/texto/detalles/{textoId}")
   public String mostrarDetallesTexto(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -108,6 +110,7 @@ public class TextoController {
   @GetMapping("/texto/sentimientos/{textoId}")
   public String mostrarSentimientosTexto(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -127,6 +130,7 @@ public class TextoController {
   @GetMapping("/texto/idea/{textoId}")
   public String mostrarIdeaTexto(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -146,6 +150,7 @@ public class TextoController {
   @GetMapping("/texto/gpt/{textoId}")
   public String mostrarGPTTexto(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -165,6 +170,7 @@ public class TextoController {
   @GetMapping("/texto/cloud/{textoId}")
   public String mostrarNubeTexto(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -185,6 +191,7 @@ public class TextoController {
   @GetMapping("/texto/pdf/{textoId}")
   public String enviarCorreo(@PathVariable Long textoId, HttpSession session,Model model) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
@@ -211,6 +218,7 @@ public class TextoController {
   @GetMapping("/texto/speech/{textoId}")
   public String mostrarSpeech(@PathVariable Long textoId, Model model, HttpSession session) {
     Usuario usuario = (Usuario) session.getAttribute("usuario");
+    UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
     Bitacora bitacora2 = new BitacoraXML(usuario);
     Bitacora bitacora3 = new BitacoraTramaPlana(usuario);
