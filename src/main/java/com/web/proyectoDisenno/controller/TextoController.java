@@ -1,5 +1,6 @@
 package com.web.proyectoDisenno.controller;
 
+import com.web.proyectoDisenno.creationallogic.CuentaCorreoSingleton;
 import com.web.proyectoDisenno.model.*;
 import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.TematicaService;
@@ -203,7 +204,7 @@ public class TextoController {
     usuarioAction.attach(bitacora3);
     usuarioAction.setAccion("Generar PDF de texto");
     Texto texto = textoService.getTextoById(textoId);
-    CuentaCorreo correo = CuentaCorreo.getInstance();
+    CuentaCorreo correo = CuentaCorreoSingleton.getInstance();
     model.addAttribute("texto", texto);
     if(correo.verificarDestinatario(usuario.getCorreo())){
       texto.generarPdf(usuario.getIdentificacion(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getNumeroTelefono(),usuario.getUrlFoto());

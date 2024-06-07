@@ -1,5 +1,6 @@
 package com.web.proyectoDisenno.controller;
 
+import com.web.proyectoDisenno.creationallogic.CloudinaryManagerSingleton;
 import com.web.proyectoDisenno.model.*;
 import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.TematicaService;
@@ -22,7 +23,7 @@ import java.util.List;
 @Controller
 public class TematicaController {
   private final TematicaService tematicaService;
-  private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance();
+  private final CloudinaryManager cloudinaryManager = CloudinaryManagerSingleton.getInstance();
   private BitacoraService bitacoraService;
 
   @Autowired

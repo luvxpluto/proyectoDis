@@ -3,6 +3,8 @@ package com.web.proyectoDisenno.thirdparty;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
+import com.web.proyectoDisenno.creationallogic.CloudinaryManagerSingleton;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,10 +17,10 @@ public class Speech {
 
   private static Speech instance;
   private final TextToSpeechClient textToSpeechClient;
-  private final CloudinaryManager cloudinaryManager = CloudinaryManager.getInstance();
+  private final CloudinaryManager cloudinaryManager = CloudinaryManagerSingleton.getInstance();
 
   // Constructor privado para evitar instanciación externa
-  private Speech() throws IOException {
+  public Speech() throws IOException {
     // Decodificar las credenciales desde la variable de entorno
     String base64Credentials = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
     byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
@@ -31,14 +33,6 @@ public class Speech {
       // Inicializar el cliente de Google Text-to-Speech con las credenciales configuradas
       textToSpeechClient = TextToSpeechClient.create(settings);
     }
-  }
-
-  // Método público estático para obtener la instancia
-  public static synchronized Speech getInstance() throws IOException {
-    if (instance == null) {
-      instance = new Speech();
-    }
-    return instance;
   }
 
   public String synthesizeSpeech(String text, String languageCode) throws IOException {

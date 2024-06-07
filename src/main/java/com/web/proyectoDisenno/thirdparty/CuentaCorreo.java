@@ -13,11 +13,7 @@ public class CuentaCorreo {
   private final String clave = System.getenv("PW_MAIL");
   private final Properties propiedades;
 
-  // Instance of the singleton class
-  private static CuentaCorreo instance = null;
-
-  // Private constructor to prevent instantiation
-  private CuentaCorreo(){
+  public CuentaCorreo(){
     propiedades = new Properties();
     String servidor = "smtp.gmail.com";
     propiedades.put("mail.smtp.host", servidor);
@@ -27,13 +23,6 @@ public class CuentaCorreo {
     propiedades.put("mail.smtp.starttls.enable","true");
   }
 
-  // Method to get the singleton instance
-  public static CuentaCorreo getInstance() {
-    if (instance == null) {
-      instance = new CuentaCorreo();
-    }
-    return instance;
-  }
 
   public void enviarCorreo(String destinatario, String tituloCorreo, String cuerpo, byte[] pdfBytes) {
     Session sesion = abrirSesion();
