@@ -43,6 +43,9 @@
                     th:text="${tematica.nombre}">Temática</option>
           </select>
         </div>
+        <div class="btn-centered p-2">
+          <a class="btn btn-primary btn-register" th:href="@{/tematica/registrar}">Registrar temática</a>
+        </div>
         <div class="mb-3">
           <label for="contenido" class="form-label">Contenido del Texto:</label>
           <textarea class="form-control" id="contenido" name="contenido" rows="13" required></textarea>

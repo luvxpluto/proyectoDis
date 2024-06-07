@@ -4,11 +4,7 @@ import com.web.proyectoDisenno.creationallogic.ChatGPTSingleton;
 import com.web.proyectoDisenno.creationallogic.CuentaCorreoSingleton;
 import com.web.proyectoDisenno.creationallogic.NubePalabrasSingleton;
 import com.web.proyectoDisenno.creationallogic.SpeechSingleton;
-import com.web.proyectoDisenno.thirdparty.ChatGPT;
-import com.web.proyectoDisenno.thirdparty.CuentaCorreo;
-import com.web.proyectoDisenno.thirdparty.NubePalabras;
-import com.web.proyectoDisenno.thirdparty.PDFCreator;
-import com.web.proyectoDisenno.thirdparty.Speech;
+import com.web.proyectoDisenno.thirdparty.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -105,7 +101,7 @@ public class Texto implements ITexto {
     return gpt.obtenerRespuesta(json.toString());
   }
 
-  public void generarPdf(String indentificacion, String nombre, String correo, String numero, String imagenUsuario) {
+  public void generarPdf(String indentificacion, String nombre, String correo, String numero, String imagenUsuario,String idioma) {
     String infoUsuario = "Identificación: " + indentificacion + "\n" +
             "Nombre: " + nombre + "\n" +
             "Correo: " + correo + "\n" +
@@ -116,8 +112,9 @@ public class Texto implements ITexto {
     String infoIdea = generarIdeaPrincipal();
     String infoGPT = consultarIdea();
 
-    PDFCreator pdf = PDFCreator.getInstance();
-    byte[] pdfBytes = pdf.createPdf(infoUsuario, imagenUsuario, infoSentimientos, imagenNube, infoIdea, infoGPT);
+    PDF pdfCreator = new PDFCreator();
+    pdfCreator = new PDFCreatorLenguage(pdfCreator, idioma);
+    byte[] pdfBytes = pdfCreator.createPdf(infoUsuario, imagenUsuario, infoSentimientos, imagenNube, infoIdea, infoGPT);
 
     CuentaCorreo cuentaCorreo = CuentaCorreoSingleton.getInstance();
     cuentaCorreo.enviarCorreo(correo, "Informe de Análisis de Texto", "Se adjunta el informe de análisis de texto", pdfBytes);

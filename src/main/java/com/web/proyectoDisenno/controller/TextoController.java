@@ -6,6 +6,7 @@ import com.web.proyectoDisenno.service.BitacoraService;
 import com.web.proyectoDisenno.service.TematicaService;
 import com.web.proyectoDisenno.service.TextoService;
 import com.web.proyectoDisenno.thirdparty.CuentaCorreo;
+import com.web.proyectoDisenno.thirdparty.Translator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -189,8 +190,16 @@ public class TextoController {
     return "texto-nube";
   }
 
+
   @GetMapping("/texto/pdf/{textoId}")
-  public String enviarCorreo(@PathVariable Long textoId, HttpSession session,Model model) {
+  public String mostrarPDF(@PathVariable Long textoId,Model model){
+    Translator translator = new Translator();
+    model.addAttribute("idiomas",translator.getSupportedLanguages());
+    return "texto-pdf";
+  };
+
+  @PostMapping("/texto/pdf/{textoId}")
+  public String procesarPDF(@RequestParam Long textoId, @RequestParam String idioma, Model model, HttpSession session){
     Usuario usuario = (Usuario) session.getAttribute("usuario");
     UsuarioAction usuarioAction = new UsuarioAction();
     Bitacora bitacora1 = new BitacoraCSV(usuario);
@@ -204,16 +213,16 @@ public class TextoController {
     usuarioAction.attach(bitacora3);
     usuarioAction.setAccion("Generar PDF de texto");
     Texto texto = textoService.getTextoById(textoId);
-    CuentaCorreo correo = CuentaCorreoSingleton.getInstance();
     model.addAttribute("texto", texto);
+    CuentaCorreo correo = CuentaCorreoSingleton.getInstance();
     if(correo.verificarDestinatario(usuario.getCorreo())){
-      texto.generarPdf(usuario.getIdentificacion(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getNumeroTelefono(),usuario.getUrlFoto());
+      texto.generarPdf(usuario.getIdentificacion(), usuario.getNombreCompleto(), usuario.getCorreo(), usuario.getNumeroTelefono(),usuario.getUrlFoto(),idioma);
       model.addAttribute("message","Correo enviado con éxito");
       return "texto-correo";
     }
     model.addAttribute("error","La dirección de correo del usuario no es valida");
     return "texto-correo";
-  }
+  };
 
   @GetMapping("/texto/speech/{textoId}")
   public String mostrarSpeech(@PathVariable Long textoId, Model model, HttpSession session) {

@@ -7,6 +7,6 @@ public interface ITexto {
   String generarNubePalabras() throws IOException;
   String generarIdeaPrincipal();
   String consultarIdea();
-  void generarPdf(String indentificacion, String nombre, String Correo, String numero, String imagenUsuario);
+  void generarPdf(String indentificacion, String nombre, String Correo, String numero, String imagenUsuario,String idioma);
   String generarAudio();
 }

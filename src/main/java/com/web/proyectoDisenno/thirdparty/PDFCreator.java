@@ -11,19 +11,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class PDFCreator {
-  private static PDFCreator instance; // Singleton instance
-
-  // Private constructor to prevent instantiation
-  private PDFCreator() {}
-
-  // Public method to get the instance
-  public static synchronized PDFCreator getInstance() {
-    if (instance == null) {
-      instance = new PDFCreator();
-    }
-    return instance;
-  }
+public class PDFCreator implements PDF{
+  public PDFCreator() {}
 
   public byte[] createPdf(String infoUsuario, String imagenUsuario, String infoSentimientos,
                           String imagenNube, String infoIdea, String infoGPT) {
