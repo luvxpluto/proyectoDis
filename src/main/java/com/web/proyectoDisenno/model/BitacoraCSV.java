@@ -19,13 +19,14 @@ public class BitacoraCSV extends Bitacora{
   @Override
   public void registrar(String accion) {
     fecha = LocalDateTime.now().toLocalDate();
+    hora = LocalDateTime.now().toLocalTime();
     descripcion = accion + "," +
             usuario.getNombreCompleto() + "," +
             fecha + "," +
+            hora + "," +
             getIP() + "," +
             System.getProperty("os.name") + "," +
-            Locale.getDefault().getDisplayCountry() + ",";
-    // Usar el service para pasarle el objeto bitacora y lo almacene en la BD
+            Locale.getDefault().getDisplayCountry();
     service.saveBitacora(this);
   }
 }

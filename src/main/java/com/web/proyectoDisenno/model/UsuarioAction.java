@@ -21,7 +21,6 @@ public class UsuarioAction {
 
   private void notifyObservers() {
     for (Bitacora bitacora : bitacoras) {
-      System.out.println("Contador de bitacoras");
       bitacora.registrar(accion);
     }
   }

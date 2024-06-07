@@ -116,7 +116,6 @@ public class Texto implements ITexto {
     byte[] pdfBytes = pdf.createPdf(infoUsuario, imagenUsuario, infoSentimientos, imagenNube, infoIdea, infoGPT);
 
     CuentaCorreo cuentaCorreo = CuentaCorreo.getInstance();
-    System.out.println("Print texto: " + correo);
     cuentaCorreo.enviarCorreo(correo, "Informe de Análisis de Texto", "Se adjunta el informe de análisis de texto", pdfBytes);
   }
 

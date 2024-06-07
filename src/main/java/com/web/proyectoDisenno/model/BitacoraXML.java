@@ -16,14 +16,15 @@ public class BitacoraXML extends Bitacora{
   @Override
   public void registrar(String accion) {
     fecha = LocalDateTime.now().toLocalDate();
+    hora = LocalDateTime.now().toLocalTime();
     descripcion = "<registro>\n" +
             "  <usuario>" + usuario.getNombreCompleto() + "</usuario>\n" +
             "  <accion>" + accion + "</accion>\n" +
             "  <fecha>" + fecha + "</fecha>\n" +
+            "  <hora>" + hora + "</hora>\n" +
             "  <ip>" + getIP() + "</ip>\n" +
             "  <sistemaOperativo>" + getSistemaOperativo() + "</sistemaOperativo>\n" +
             "</registro>";
-    // BD
     service.saveBitacora(this);
   }
 }

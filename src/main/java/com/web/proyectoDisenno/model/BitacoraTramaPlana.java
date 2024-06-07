@@ -18,9 +18,11 @@ public class BitacoraTramaPlana extends Bitacora{
   @Override
   public void registrar(String accion) {
     fecha = LocalDateTime.now().toLocalDate();
+    hora = LocalDateTime.now().toLocalTime();
     descripcion = "Accion" + accion.replace(" ", "") +
             "Usuario" + usuario.getNombreCompleto().replace(" ", "") +
             "Fecha" + fecha +
+            "Hora" + hora +
             "IP" + getIP() +
             "SistemaOperativo" + System.getProperty("os.name").replace(" ", "") +
             "Pais" + Locale.getDefault().getDisplayCountry().replace(" ", "");

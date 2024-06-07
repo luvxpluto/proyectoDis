@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Consultar Bitacoras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            padding-top: 50px;
+            padding-bottom: 30px;
+        }
+        .title-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .btn-centered {
+            display: flex;
+            justify-content: center;
+        }
+        .btn-register {
+            width: auto;
+            padding: 10px 50px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container">
+        <div class="form-container">
+            <h2 class="title-section">Consultar Bitacoras</h2>
+            <form th:action="@{/bitacora}" method="post"> <!---Cambiar por el post de la vista bitacoras--->
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="tipoBitacora" class="form-label">Seleccione un tipo de Bitacora:</label>
+                        <select id="tipoBitacora" name="tipoBitacora" class="form-control" required>
+                            <option value="" disabled selected>Bitacora</option>
+                            <option value="CSV">CSV</option>
+                            <option value="TP">TramaPlana</option>
+                            <option value="XML">XML</option>
+                        </select>
+                    </div>
+                    <div class="col mb-3">
+                        <label for="tipoConsulta" class="form-label">Seleccione la consulta:</label>
+                        <select id="tipoConsulta" name="tipoConsulta" class="form-control" required>
+                            <option value="" disabled selected>Consulta</option>
+                            <option value="consultaHoy">Registros de hoy</option>
+                            <option value="consultaTiempo">Registros de hoy en rango</option>
+                            <option value="consultaGeneral">Registros generales</option>
+                            <option value="consultaUsuario">Registros de un usuario</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-centered p-2">
+                    <button type="submit" class="btn btn-primary btn-register">Consultar Bitacora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

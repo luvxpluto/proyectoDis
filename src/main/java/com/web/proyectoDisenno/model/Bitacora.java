@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import com.web.proyectoDisenno.service.BitacoraService;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -18,7 +20,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 @NoArgsConstructor
 @Table(name = "bitacoras")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipoBitacora")
+@DiscriminatorColumn(name = "tipo")
 public abstract class Bitacora {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +36,20 @@ public abstract class Bitacora {
   protected LocalDate fecha;
 
   @Getter
+  @JoinColumn(name = "hora")
+  protected LocalTime hora;
+
+  @Getter
   @JoinColumn(name = "descripcion")
   protected String descripcion;
 
   @Setter
   @Transient
   protected BitacoraService service;
+
+  @Getter
+  @Column(insertable = false, updatable = false)
+  private String tipo;
 
   public Bitacora(Usuario usuario) {
     this.usuario = usuario;

@@ -37,8 +37,6 @@ public class CuentaCorreo {
 
   public void enviarCorreo(String destinatario, String tituloCorreo, String cuerpo, byte[] pdfBytes) {
     Session sesion = abrirSesion();
-    System.out.println("Print CUENTA CORREO destinatario: "+destinatario);
-    System.out.println("Print CUENTA CORREO usuario: "+usuario);
     try {
       Message message = new MimeMessage(sesion);
       message.setFrom(new InternetAddress(usuario));
